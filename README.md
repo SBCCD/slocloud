@@ -1,7 +1,7 @@
 SLO Cloud
 ========
 
-A Student Learning Objectives (SLO) Reporting Tool
+A Student Learning Objectives (SLO) Reporting Tool. [Click here](http://lawsonry.com/projects/slocloud) to access the demo.
 
 **This is a peer-reviewed, open-source project for public institutions of higher education, licensed under the GPLv2.**
 
