@@ -45,7 +45,7 @@ For those of you who are actively contributing to projects, please comment your 
 For example, in the comment head of the file you're working on, add something like this:
 
 	Contributors:
-	Jesse Lawson (lawsonry), jlawson@coastline.edu
+	Jesse Lawson (lawsonry), jesse@lawsonry.com
 
 
 Then, in your code, put something like this:
