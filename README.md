@@ -34,6 +34,10 @@ This release is avilable to customize as-is via hard-coded values, or (and this 
 
 Of course, this is just one of many ways that customization is possible. 
 
+# Demonstration
+
+SBCCD has a brief write-up of how they customized the SLOCloud for their usage [here](http://tess.sbccd.org/Departments/District%20Computing%20Services/SLOCloud).
+
 # Contributing
 
 If you are a programmer, developer, or other technology professional looking to contribute to this project, please feel free to fork this repo and submit pull requests at will. All pull requests are reviewed at least weekly. 
