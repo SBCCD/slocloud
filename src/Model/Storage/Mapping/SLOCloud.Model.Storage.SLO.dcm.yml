@@ -1,0 +1,61 @@
+SLOCloud\Model\Storage\SLO:
+  type: entity
+  inheritanceType: SINGLE_TABLE
+  table: slos
+  id:
+    id:
+      type: integer
+      nullable: false
+      id: true
+      generator:
+        strategy: AUTO
+  discriminatorColumn:
+    name: type
+    type: string
+    nullable: false
+    length: 10
+  discriminatorMap:
+    Simple: SimpleSLO
+    Rubric: RubricSLO
+  fields:
+    enteredOn:
+      type: utc_datetime
+      column: entered_on
+      nullable: false
+    term:
+      type: string
+      nullable: false
+      length: 6
+    subject:
+      type: string
+      nullable: false
+      length: 10
+    class:
+      type: string
+      nullable: false
+      length: 20
+    section:
+      type: string
+      nullable: false
+      length: 30
+    method:
+      type: text
+      nullable: false
+    proposed:
+      type: text
+      nullable: false
+    plos:
+      type: text
+      nullable: false
+    geos:
+      type: text
+      nullable: false
+    ilos:
+      type: text
+      nullable: false
+  oneToMany:
+    statements:
+      targetEntity: SLOCloud\Model\Storage\Statement
+      mappedBy: slo
+      cascade: ['persist']
+      fetch: EAGER

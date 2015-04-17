@@ -1,0 +1,94 @@
+unit_tests_slos:
+  -
+    id: 1
+    entered_on: '2015-05-20 00:00:00.000000'
+    term: '2015SP'
+    subject: 'subject'
+    class: 'class'
+    section: 'section'
+    method: 'method'
+    proposed: 'proposed'
+    plos: 'N/A'
+    geos: 'Not Used'
+    ilos: 'N/A'
+    type: 'Simple'
+  -
+    id: 2
+    entered_on: '2015-05-20 00:00:00.000000'
+    term: '2015SP'
+    subject: 'subject'
+    class: 'class'
+    section: 'section'
+    method: 'Not Used'
+    proposed: 'proposed'
+    plos: 'Not Used'
+    geos: 'Not Used'
+    ilos: 'Not Used'
+    type: 'Rubric'
+
+unit_tests_statements:
+  -
+    id: 1
+    slo_id: 1
+    statement: "This is the statement"
+    rubric1: 20
+    rubric2: 40
+    rubric3: -1
+    rubric4: -1
+    met: "Not Used"
+    plo: "Not Used"
+    geo: "Not Used"
+    ilo: "Not Used"
+    type: 'Simple'
+  -
+    id: 2
+    slo_id: 2
+    statement: "This is the statement"
+    rubric1: 10
+    rubric2: 20
+    rubric3: 30
+    rubric4: 40
+    met: "Yes"
+    plo: "CIS#2"
+    geo: "GEO#8"
+    ilo: "ILO#3"
+    type: 'Rubric'
+  -
+    id: 3
+    slo_id: 1
+    statement: "This is another statement"
+    rubric1: 10
+    rubric2: 30
+    rubric3: -1
+    rubric4: -1
+    met: "Not Used"
+    plo: "Not Used"
+    geo: "Not Used"
+    ilo: "Not Used"
+    type: 'Simple'
+  -
+    id: 4
+    slo_id: 2
+    statement: "This is another statement"
+    rubric1: 15
+    rubric2: 25
+    rubric3: 35
+    rubric4: 45
+    met: "No"
+    plo: "N/A"
+    geo: "N/A"
+    ilo: "N/A"
+    type: 'Rubric'
+  -
+    id: 5
+    slo_id: 2
+    statement: "This is yet another statement"
+    rubric1: 5
+    rubric2: 10
+    rubric3: 15
+    rubric4: 20
+    met: "Yes"
+    plo: "N/A"
+    geo: "GEO#8"
+    ilo: "N/A"
+    type: 'Rubric'

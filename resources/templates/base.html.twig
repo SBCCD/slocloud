@@ -1,0 +1,162 @@
+{#
+
+SLO Cloud - A Cloud-Based SLO Reporting Tool for Higher Education
+
+This is a peer-reviewed, open-source, public project made possible by the Open Innovation in Higher Education project.
+
+Copyright (C) 2015 Jesse Lawson, San Bernardino Community College District
+
+Contributors:
+Jesse Lawson
+Jason Brady
+
+THIS PROJECT IS LICENSED UNDER GPLv2. YOU MAY COPY, DISTRIBUTE AND MODIFY THE SOFTWARE AS LONG AS YOU TRACK
+CHANGES/DATES OF IN SOURCE FILES AND KEEP ALL MODIFICATIONS UNDER GPL. YOU CAN DISTRIBUTE YOUR APPLICATION USING A
+GPL LIBRARY COMMERCIALLY, BUT YOU MUST ALSO DISCLOSE THE SOURCE CODE.
+
+GNU General Public License Version 2 Disclaimer:
+
+---
+
+This file is part of SLO Cloud
+
+SLO Cloud is free software; you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later.
+
+SLO Cloud is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free
+Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA or
+visit http://opensource.org/licenses/GPL-2.0
+
+---
+
+#}<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--><html lang="en" class="no-js"><!--<![endif]-->
+<head>
+    <title>SLOCloud&trade;</title>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex,nocache,noarchive">
+    {#
+        Our goal here is to have proper rendering on a phone, but still have it default to a zoomed out view.
+        Without the below line, at least Chrome on Android will make some text too large.
+    #}
+    <meta name="viewport" content="width=device-width">
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ css("main.css") }}">
+        <link rel="stylesheet" href="{{ css("bootstrap.css") }}">
+        <link rel="stylesheet" href="{{ css("font-awesome.css") }}">
+        <link rel="stylesheet" href="{{ css("ladda-themeless.min.css") }}">
+    {% endblock %}
+
+    <!-- Favicon -->
+    <!-- <link rel="shortcut icon" href="favicon.ico"> -->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="{{ script('html5shiv.js') }}"></script>
+    <script src="{{ script('respond.min.js') }}"></script>
+    <![endif]-->
+
+    {% block headjs %}
+        <script src="{{ script("console-polyfill.js") }}"></script>
+        <script src="{{ script("polyfills.js") }}"></script>
+        <script src="{{ script("jquery.js") }}"></script>
+        <script src="{{ script("jquery.scrollTo.js") }}"></script>
+        <script src="{{ script("logger.js") }}"></script>
+        <script src="{{ script("handlebars.js") }}"></script>
+        <script src="{{ script("errorlog.js") }}"></script>
+        <script src="{{ script("jquery.fileDownload.js") }}"></script>
+    {% endblock %}
+</head>
+<body class=" ">
+<div id="wrapper">
+    <header>
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <div class="row">
+                        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <h1 class="toptitle">
+                            <img src="img/slocloud-badge-trans.png" /> {{ institution['name'] }}
+                        </h1>
+                    </div>
+                    {% if isAuthenticated() %}
+                        {% include 'navigation.html.twig' %}
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="content">
+        <div class="container">
+            <div class="">
+                <div class="col-md-12">
+                    {% if isAuthenticated() %}
+                        <h3 class="pagetitle">{% block title %}{% endblock %}</h3>
+                    {% endif %}
+                    <div id="flash"></div>
+                    {% if flash['error'] is defined %}
+                        <div class="alert alert-danger col-xs-6 col-xs-offset-3" role="alert">
+                            <p class="text-center">{{ flash['error'] }}</p>
+                        </div>
+                    {% endif %}
+                    {% block content %}{% endblock %}
+                    <!-- /.portlet-body -->
+                </div>
+                <!-- /.layout-main -->
+            </div>
+            <!-- /.layout -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- .content -->
+</div> <!-- /#wrapper -->
+<footer class="footer hidden-print">
+    <div class="container">
+        <p align="center">
+            Aeron Zentner | Jesse Lawson | <a href="http://sbccd.org/slocloud">Modified by SBCCD</a>
+        </p>
+    </div>
+</footer>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Core JS -->
+{% block bodyjs %}
+    <script src="{{ script("bootstrap.js") }}"></script>
+    <script src="{{ script("spin.js") }}"></script>
+    <script src="{{ script("ladda.js") }}"></script>
+    <script src="{{ script("ladda.jquery.js") }}"></script>
+    <script src="{{ script("moment-with-locales.js") }}"></script>
+    <script src="{{ script("slocloud.js") }}"></script>
+{% endblock %}
+
+{% block bottom %}
+{% endblock %}
+{% verbatim %}
+<script id="flash-template" type="text/x-handlebars-template">
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <strong>Something went wrong!</strong><br/>A problem occurred while viewing this page. Please try to continue using the form.
+        If you have trouble using the form, record your work so you can try again later and then notify your coordinator of the issue.
+        {{#if errors}}
+        <ul>
+            {{#each errors}}
+            <li>{{this}}</li>
+            {{/each}}
+        </ul>
+        {{/if}}
+    </div>
+</script>
+{% endverbatim %}
+</body>
+</html>

@@ -1,0 +1,42 @@
+unit_tests_slos:
+  -
+    id: 3
+    entered_on: '2015-05-20 00:00:00.000000'
+    term: 'term'
+    subject: 'subject'
+    class: 'class'
+    section: 'section'
+    method: 'method'
+    proposed: 'proposed'
+    plos: 'N/A'
+    geos: 'Not Used'
+    ilos: 'N/A'
+    type: 'Simple'
+
+unit_tests_statements:
+  -
+    id: 6
+    slo_id: 3
+    statement: "This is a new statement"
+    rubric1: 1
+    rubric2: 2
+    rubric3: -1
+    rubric4: -1
+    met: "Not Used"
+    plo: "Not Used"
+    geo: "Not Used"
+    ilo: "Not Used"
+    type: 'Simple'
+  -
+    id: 7
+    slo_id: 3
+    statement: "This is another new statement"
+    rubric1: 3
+    rubric2: 4
+    rubric3: -1
+    rubric4: -1
+    met: "Not Used"
+    plo: "Not Used"
+    geo: "Not Used"
+    ilo: "Not Used"
+    type: 'Simple'

@@ -1,0 +1,383 @@
+/*
+
+SLO Cloud - A Cloud-Based SLO Reporting Tool for Higher Education
+
+This is a peer-reviewed, open-source, public project made possible by the Open Innovation in Higher Education project.
+
+Copyright (C) 2015 Jesse Lawson, San Bernardino Community College District
+
+Contributors:
+Jesse Lawson
+Jason Brady
+
+THIS PROJECT IS LICENSED UNDER GPLv2. YOU MAY COPY, DISTRIBUTE AND MODIFY THE SOFTWARE AS LONG AS YOU TRACK
+CHANGES/DATES OF IN SOURCE FILES AND KEEP ALL MODIFICATIONS UNDER GPL. YOU CAN DISTRIBUTE YOUR APPLICATION USING A
+GPL LIBRARY COMMERCIALLY, BUT YOU MUST ALSO DISCLOSE THE SOURCE CODE.
+
+GNU General Public License Version 2 Disclaimer:
+
+---
+
+This file is part of SLO Cloud
+
+SLO Cloud is free software; you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later.
+
+SLO Cloud is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free
+Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA or
+visit http://opensource.org/licenses/GPL-2.0
+
+---
+
+*/
+
+/* This limits the resizing to only tablet-sized displays. Sorry phones! */
+.container {
+    width: 750px;
+    max-width: none !important;
+}
+@media (min-width: 768px) {
+    .container {
+        width: 750px;
+    }
+}
+@media (min-width: 992px) {
+    .container {
+        width: 970px;
+    }
+}
+@media (min-width: 1200px) {
+    .container {
+        width: 1170px;
+    }
+}
+@media (max-width: 750px) {
+    #wrapper {
+        width: 750px;
+    }
+}
+
+.container>.navbar-header,
+.container-fluid>.navbar-header,
+.container>.navbar-collapse,
+.container-fluid>.navbar-collapse {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.form-horizontal .control-label {
+    padding-top: 7px;
+    margin-bottom: 0;
+    text-align: right;
+}
+/* end styles to limit responsiveness */
+
+/* bootstrap customization styles */
+
+.dropdown-menu > li > span {
+    display: block;
+    padding: 3px 10px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+
+/* end bootstrap customization styles */
+
+.pagetitle {
+    margin-top: 0;
+}
+
+.toptitle {
+    color: white;
+}
+.toptitle img {
+    height: 35px;
+    width: auto;
+    margin-bottom: 10px;
+}
+
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+    margin-bottom: 10px;
+}
+.form-signin .checkbox {
+    font-weight: normal;
+}
+.form-signin .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+}
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+.form-signin input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+select:disabled, input:disabled, textarea:disabled {
+    background-color: #eaeae3;
+}
+
+#slo-form textarea {
+    height: 9em;
+}
+
+.submit-block {
+    display: table;
+}
+
+#slos table {
+    table-layout: fixed;
+}
+
+#slos .table th {
+    text-align: center;
+}
+
+#slos .slo-disabled .slo-statement,
+#slos .slo-disabled .slo-number {
+    text-decoration: line-through;
+}
+
+#slos .slo-delete {
+    margin-bottom: .5em;
+    background-color: white;
+}
+
+#slos .glyphicon-remove {
+    color: #ce312c;
+}
+
+#slos .slo-add {
+    background-color: white;
+}
+
+#slos .glyphicon-plus {
+    color: #77a700;
+}
+
+/* Simple SLOs */
+
+#slos .first-simple {
+    width: 4em;
+    text-align: center;
+}
+
+#slos .second-simple {
+}
+
+#slos .third-simple {
+    width: 8em;
+}
+
+#slos .fourth-simple {
+    width: 8em;
+}
+
+/* End Simple SLOs */
+
+/* Rubric SLOs */
+#slos .first {
+    width: 4em;
+    text-align: center;
+}
+
+#slos .second {
+}
+
+#slos .third {
+    width: 4em;
+}
+
+#slos .fourth {
+    width: 4em;
+}
+
+#slos .fifth {
+    width: 4em;
+}
+
+#slos .sixth {
+    width: 4em;
+}
+
+#slos .seventh {
+    width: 6em;
+}
+
+#slos .eighth {
+    width: 7.4em;
+    max-width: 7.4em;
+}
+
+#slos .ninth {
+    width: 6.4em;
+}
+/* End Rubric SLOs */
+
+/* SLO Summary Report */
+
+#slos.slo-summary.simple .first {
+}
+
+#slos.slo-summary.simple .second {
+}
+
+#slos.slo-summary.simple .third {
+    width: 8em;
+    text-align: center;
+}
+
+#slos.slo-summary.simple .fourth {
+    width: 8em;
+    text-align: center;
+}
+
+#slos.slo-summary.simple .fifth {
+    width: 8em;
+    text-align: center;
+}
+
+#slos.slo-summary.rubric .first {
+    width: 4em;
+    text-align: center;
+}
+
+#slos.slo-summary.rubric .second {
+}
+
+#slos.slo-summary.rubric .rubrics {
+    width: 16em;
+}
+
+#slos.slo-summary.rubric .third {
+    width: 4em;
+    text-align: center;
+}
+
+#slos.slo-summary.rubric .fourth {
+    width: 4em;
+    text-align: center;
+}
+
+#slos.slo-summary.rubric .fifth {
+    width: 4em;
+    text-align: center;
+}
+
+#slos.slo-summary.rubric .sixth {
+    width: 4em;
+    text-align: center;
+}
+
+#slos.slo-summary.rubric .seventh {
+    width: 5em;
+    text-align: center;
+}
+
+#slos.slo-summary.rubric .eighth {
+    width: 5em;
+    text-align: center;
+}
+
+/* End SLO Summary Report */
+
+#slos thead td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+#slos .om-label {
+    text-align: center;
+}
+
+.portlet {
+    padding-top: 2em;
+}
+
+#slos .input-sm {
+    padding: 6px;
+}
+
+#slos .total,
+#slos .sufficient {
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+}
+
+span.current {
+    background-color: #FFFF00;
+}
+
+.icons-list {
+    padding: 0;
+    margin: 0 0 10px;
+    list-style: none;
+}
+.icons-list > li {
+    position: relative;
+    padding-left: 2.2em;
+    margin-bottom: 1em;
+    line-height: 1.65em;
+}
+.icons-list > li > .icon-li {
+    position: absolute;
+    top: .25em;
+    left: 0;
+    width: 1em;
+    font-size: 1.25em;
+    text-align: center;
+}
+
+.text-primary,
+.text-primary:hover {
+    color: #77a700;
+}
+.text-secondary,
+.text-secondary:hover {
+    color: #6685a4;
+}
+.text-tertiary,
+.text-tertiary:hover {
+    color: #bcbcbc;
+}
+.text-info,
+.text-info:hover {
+    color: #5bc0de;
+}
+.text-warning,
+.text-warning:hover {
+    color: #f0ad4e;
+}
+.text-success,
+.text-success:hover {
+    color: #5cb85c;
+}
+.text-danger,
+.text-danger:hover {
+    color: #d9534f;
+}

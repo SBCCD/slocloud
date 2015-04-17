@@ -1,0 +1,202 @@
+<?xml version="1.0"?>
+<!--
+
+SLO Cloud - A Cloud-Based SLO Reporting Tool for Higher Education
+
+This is a peer-reviewed, open-source, public project made possible by the Open Innovation in Higher Education project.
+
+Copyright (C) 2015 Jesse Lawson, San Bernardino Community College District
+
+Contributors:
+Jesse Lawson
+Jason Brady
+
+THIS PROJECT IS LICENSED UNDER GPLv2. YOU MAY COPY, DISTRIBUTE AND MODIFY THE SOFTWARE AS LONG AS YOU TRACK
+CHANGES/DATES OF IN SOURCE FILES AND KEEP ALL MODIFICATIONS UNDER GPL. YOU CAN DISTRIBUTE YOUR APPLICATION USING A
+GPL LIBRARY COMMERCIALLY, BUT YOU MUST ALSO DISCLOSE THE SOURCE CODE.
+
+GNU General Public License Version 2 Disclaimer:
+
+- - -
+
+This file is part of SLO Cloud
+
+SLO Cloud is free software; you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later.
+
+SLO Cloud is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free
+Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA or
+visit http://opensource.org/licenses/GPL-2.0
+
+- - -
+
+-->
+<project name="main" default="build">
+    <property name="config" value="" override="false" />
+    <property name="filter" value="" override="false" />
+    <if>
+        <not><equals arg1="${filter}" arg2="" /></not>
+        <then>
+            <property name="filterArg" value="--filter ${filter}" />
+        </then>
+        <else>
+            <property name="filterArg" value="" />
+        </else>
+    </if>
+
+    <target name="test:debug">
+        <exec command="php -c tests\php.ini -d xdebug.remote_autostart=1 vendor\phpunit\phpunit\phpunit --colors ${filterArg}" passthru="true" checkreturn="true" />
+    </target>
+    <target name="test">
+        <exec command="php -c tests\php.ini vendor\phpunit\phpunit\phpunit --colors ${filterArg}" passthru="true" checkreturn="true" />
+    </target>
+
+    <target name="resources">
+        <!-- JS files -->
+        <copy file="vendor/paulmillr/console-polyfill/index.js" tofile="public/js/console-polyfill.js"/>
+        <copy file="vendor/wycats/handlebars.js/handlebars-v2.0.0.js" tofile="public/js/handlebars.js"/>
+        <copy todir="public/js">
+            <fileset dir="resources/js" includes="*.js"/>
+            <fileset dir="vendor/jquery/jquery/dist" includes="*.js *.map" />
+            <fileset dir="vendor/flesler-git/jquery.scrollto" includes="*.js *.map" />
+            <fileset dir="vendor/jonnyreeves/js-logger/src" includes="*.js" />
+            <fileset dir="vendor/johnculviner/jquery.fileDownload" includes="*.js *.map" />
+            <fileset dir="vendor/twbs/bootstrap/dist/js" includes="*.js *.map" excludes="npm.js" />
+            <fileset dir="vendor/hakimel/ladda/dist" includes="*.js *.map" />
+            <fileset dir="vendor/hakimel/ladda/js" includes="*.js *.map" />
+            <fileset dir="vendor/moment-git/moment" includes="moment.js" />
+            <fileset dir="vendor/moment-git/moment/min" includes="*.js *.map" />
+            <fileset dir="vendor/scottjehl/Respond/dest" includes="*.js" />
+            <fileset dir="vendor/aFarkas/html5shiv/dist" includes="*.js" />
+        </copy>
+
+        <!-- CSS files -->
+        <copy todir="public/css">
+            <fileset dir="resources/css">
+                <include name="*.css" />
+            </fileset>
+            <fileset dir="vendor/hakimel/ladda/css">
+                <include name="*.css" />
+                <include name="*.map"/>
+                <exclude name="demo.css" />
+            </fileset>
+            <fileset dir="vendor/hakimel/ladda/dist">
+                <include name="*.css" />
+                <include name="*.map"/>
+            </fileset>
+        </copy>
+        <if>
+            <not><available property="ignored" file="public/css/bootstrap.css" type="file" /></not>
+            <then>
+                <echo msg="Creating bootstrap.css" level="info"/>
+                <exec executable="vendor/bin/lessc">
+                    <arg value="-nru"/>
+                    <arg file="resources/css/custom-bootstrap.less"/>
+                    <arg file="public/css/bootstrap.css"/>
+                </exec>
+            </then>
+        </if>
+        <if>
+            <not><available property="ignored" file="public/css/bootstrap.min.css" type="file" /></not>
+            <then>
+                <echo msg="Creating bootstrap.min.css" level="info"/>
+                <exec executable="vendor/bin/lessc">
+                    <arg value="-nru"/>
+                    <arg value="--compress"/>
+                    <arg file="resources/css/custom-bootstrap.less"/>
+                    <arg file="public/css/bootstrap.min.css"/>
+                </exec>
+            </then>
+        </if>
+        <if>
+            <not><available property="ignored" file="public/css/font-awesome.css" type="file" /></not>
+            <then>
+                <echo msg="Creating font-awesome.css" level="info"/>
+                <exec executable="vendor/bin/lessc">
+                    <arg value="-nru"/>
+                    <arg file="vendor/fortawesome/font-awesome/less/font-awesome.less"/>
+                    <arg file="public/css/font-awesome.css"/>
+                </exec>
+            </then>
+        </if>
+        <if>
+            <not><available property="ignored" file="public/css/font-awesome.min.css" type="file" /></not>
+            <then>
+                <echo msg="Creating font-awesome.min.css" level="info"/>
+                <exec executable="vendor/bin/lessc">
+                    <arg value="-nru"/>
+                    <arg value="--compress"/>
+                    <arg file="vendor/fortawesome/font-awesome/less/font-awesome.less"/>
+                    <arg file="public/css/font-awesome.min.css"/>
+                </exec>
+            </then>
+        </if>
+
+        <!-- fonts -->
+        <copy todir="public/fonts">
+            <fileset dir="vendor/twbs/bootstrap/dist/fonts">
+                <include name="*" />
+            </fileset>
+            <fileset dir="vendor/fortawesome/font-awesome/fonts">
+                <include name="*" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="clean:build">
+        <delete>
+            <fileset dir="public/js">
+                <include name="*" />
+            </fileset>
+            <fileset dir="public/css">
+                <include name="*" />
+            </fileset>
+            <fileset dir="public/fonts">
+                <include name="*" />
+            </fileset>
+        </delete>
+    </target>
+    <target name="clean" depends="clean:build"/>
+    <target name="clean:all" depends="clean:build"/>
+
+    <target name="db:test">
+        <exec command="sqlcmd -S .\SQLEXPRESS -b -i tests\createdb-sqlsrv.sql" passthru="true" checkreturn="true" />
+    </target>
+
+    <target name="db">
+        <if>
+            <not><equals arg1="${config}" arg2="" /></not>
+            <then><echo msg="selected config: ${config}" /></then>
+            <else><echo msg="selected config: default" /></else>
+        </if>
+        <exec command="set config=${config}&amp;&amp; set debug-config=1&amp;&amp; doctrine orm:info" passthru="true" checkreturn="true" />
+        <input message="This operation will clear all data used by the above configuration. Are you sure?"
+               propertyName="confirm"
+               defaultValue="n" />
+        <if>
+            <equals arg1="${confirm}" arg2="y" casesensitive="false" trim="true"/>
+            <then>
+                <exec command="set config=${config}&amp;&amp; doctrine orm:schema-tool:drop --force" passthru="true" checkreturn="true" />
+                <exec command="set config=${config}&amp;&amp; doctrine orm:schema-tool:create" passthru="true" checkreturn="true" />
+            </then>
+            <else>
+                <echo msg="skipping" />
+            </else>
+        </if>
+    </target>
+
+    <target name="devserver">
+        <exec command="start http://localhost:8000" />
+        <exec command="php -S localhost:8000 -t public -c tests\php.ini devrouter.php" passthru="true" checkreturn="true" />
+    </target>
+
+    <target name="devserver:debug">
+        <exec command="start http://localhost:8000" />
+        <exec command="php -S localhost:8000 -t public -c tests\php.ini -d xdebug.remote_autostart=1 devrouter.php" passthru="true" checkreturn="true" />
+    </target>
+
+    <target name="build" depends="resources"/>
+</project>

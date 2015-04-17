@@ -1,0 +1,194 @@
+{#
+
+SLO Cloud - A Cloud-Based SLO Reporting Tool for Higher Education
+
+This is a peer-reviewed, open-source, public project made possible by the Open Innovation in Higher Education project.
+
+Copyright (C) 2015 Jesse Lawson, San Bernardino Community College District
+
+Contributors:
+Jesse Lawson
+Jason Brady
+
+THIS PROJECT IS LICENSED UNDER GPLv2. YOU MAY COPY, DISTRIBUTE AND MODIFY THE SOFTWARE AS LONG AS YOU TRACK
+CHANGES/DATES OF IN SOURCE FILES AND KEEP ALL MODIFICATIONS UNDER GPL. YOU CAN DISTRIBUTE YOUR APPLICATION USING A
+GPL LIBRARY COMMERCIALLY, BUT YOU MUST ALSO DISCLOSE THE SOURCE CODE.
+
+GNU General Public License Version 2 Disclaimer:
+
+---
+
+This file is part of SLO Cloud
+
+SLO Cloud is free software; you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later.
+
+SLO Cloud is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free
+Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA or
+visit http://opensource.org/licenses/GPL-2.0
+
+---
+
+#}{% extends "Shared/SLOSummary.html.twig" %}
+{% block content %}
+    <form id="slo-form" class="form-horizontal" method="post">
+        <div id="alert"></div>
+        <div class="form-group">
+            <div class="fieldset-years">
+                <label for="year" class="col-xs-1 control-label">Year</label>
+                <div class="col-xs-5">
+                    <select id="year" name="year" class="form-control">
+                        <option value="">--Select One--</option>
+                        {% for year, name in years %}
+                            <option value="{{ year }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="fieldset-periods" style="display: none">
+                <label for="period" class="col-xs-1 control-label">Period</label>
+                <div class="col-xs-5">
+                    <select id="period" name="period" class="form-control">
+                        <option value="">--Select One--</option>
+                        {% for value, name in periods %}
+                            <option value="{{ value }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="fieldset-divisions" style="display: none">
+                <label for="division" class="col-xs-1 control-label">Division</label>
+                <div class="col-xs-4">
+                    <select id="division" name="division" class="form-control">
+                        <option value="">--Select One--</option>
+                        {% for division in divisions %}
+                            <option value="{{ division['id'] }}">{{ division['name'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="fieldset-subjects" style="display: none">
+                <label for="subject" class="col-xs-1 control-label">Dept</label>
+                <div class="col-xs-2">
+                    <select id="subject" name="subject" class="form-control">
+                        <option value="">--Select One--</option>
+                    </select>
+                </div>
+            </div>
+            <div class="fieldset-classes" style="display: none">
+                <label for="class" class="col-xs-1 control-label">Course</label>
+                <div class="col-xs-3">
+                    <select id="class" name="class" class="form-control">
+                        <option value="">--Select One--</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="fieldset-slos" style="display: none">
+            {{ tools }}
+            <div id="slos" class="slo-summary simple"></div>
+        </div>
+    </form>
+{% endblock %}
+{% block bottom %}
+    {% verbatim %}
+    <script id="failure-template" type="text/x-handlebars-template">
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <strong>Failed!</strong><br/>A problem occurred while retrieving data. Please try refreshing your browser and trying again.
+            If it still fails, please notify your IT department of the issue.
+            {{#if error.errors}}
+            <ul>
+                {{#each error.errors}}
+                <li>{{this}}</li>
+                {{/each}}
+            </ul>
+            {{/if}}
+        </div>
+    </script>
+    <script id="slo-table-template" type="text/x-handlebars-template">
+        {{#if rows}}
+            <h4>Course SLOs</h4>
+            {% endverbatim %}
+            <p class="hidden-print"><strong>Note: <a href="{{ shortName }}/Course SLO Summary Evaluation Form.docx">Course SLO Summary Evaluation Form is available</a>.</strong></p>
+            {% verbatim %}
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="first"><strong>#</strong></th>
+                        <th class="second"><strong>SLO Statement</strong></th>
+                        <th class="third"><strong># of Students Assessed</strong></th>
+                        <th class="fourth"><strong># of Students who Met SLO</strong></th>
+                        <th class="fifth"><strong>% of Students who Met SLO</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{{rows}}}
+                </tbody>
+            </table>
+            <h4>Reflections Summary</h4>
+            <div id="proposed">
+                {{#if proposed.length}}
+                <ul>
+                    {{#each proposed}}
+                    <li>{{{this}}}</li>
+                    {{/each}}
+                </ul>
+                {{/if}}
+            </div>
+            <h4>Sections Reporting</h4>
+            {{#if reporting.length}}
+            <ul>
+                {{#each reporting}}
+                <li>{{section}} for {{term}} on {{when}}</li>
+                {{/each}}
+            </ul>
+            {{else}}
+            <p>No Sections Reported</p>
+            {{/if}}
+        {{/if}}
+        {{#if notReporting.length}}
+        <h4>Sections Not Reporting</h4>
+        <ul>
+            {{#each notReporting}}
+            <li>{{section}} for {{term}}</li>
+            {{/each}}
+        </ul>
+        {{else}}
+            {{#if reporting.length }}
+                <p>All sections reporting</p>
+            {{else}}
+                <h4>No sections found for this course</h4>
+            {{/if}}
+        {{/if}}
+    </script>
+    <script id="slo-row-template" type="text/x-handlebars-template">
+        <tr class="row-{{label}}">
+            <td class="first">
+                <span class="slo-number">{{num}}</span>
+            </td>
+            <td class="second">
+                <div class="slo-statement">{{statement}}</div>
+            </td>
+            <td class="third">
+                <span class="slo-assessed">{{assessed}}</span>
+            </td>
+            <td class="fourth">
+                <span class="slo-target-met">{{targetMet}}</span>
+            </td>
+            <td class="fifth">
+                <span class="slo-percent-target-met">
+                    {{#if percentTargetMet}}
+                        {{percentTargetMet}}%
+                    {{/if}}
+                </span>
+            </td>
+        </tr>
+    </script>
+    {% endverbatim %}
+{% endblock %}

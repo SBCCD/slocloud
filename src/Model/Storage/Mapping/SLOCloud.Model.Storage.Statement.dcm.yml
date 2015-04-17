@@ -1,0 +1,60 @@
+SLOCloud\Model\Storage\Statement:
+  type: entity
+  inheritanceType: SINGLE_TABLE
+  table: statements
+  id:
+    id:
+      type: integer
+      nullable: false
+      id: true
+      generator:
+        strategy: AUTO
+  discriminatorColumn:
+    name: type
+    type: string
+    nullable: false
+    length: 10
+  discriminatorMap:
+    Simple: SimpleStatement
+    Rubric: RubricStatement
+  fields:
+    statement:
+      type: text
+      nullable: false
+    rubric1:
+      type: integer
+      nullable: false
+    rubric2:
+      type: integer
+      nullable: false
+    rubric3:
+      type: integer
+      nullable: false
+    rubric4:
+      type: integer
+      nullable: false
+    met:
+      type: string
+      nullable: false
+      length: 10
+    plo:
+      type: string
+      nullable: false
+      length: 10
+    geo:
+      type: string
+      nullable: false
+      length: 10
+    ilo:
+      type: string
+      nullable: false
+      length: 10
+  manyToOne:
+    slo:
+      targetEntity: SLOCloud\Model\Storage\SLO
+      inversedBy: statements
+      joinColumn:
+        name: slo_id
+        referencedColumnName: id
+        nullable: false
+        onDelete: CASCADE

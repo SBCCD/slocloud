@@ -216,3 +216,21 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+#PHPStorm
+.idea
+
+
+#Project Specific
+/vendor/
+/components/
+templates/cache
+data/*/*.json
+var/*/*
+!var/*/README.txt
+var/*.*
+public/css/*
+public/js/*
+public/fonts/*
+tests/var/*
+!tests/var/README.txt

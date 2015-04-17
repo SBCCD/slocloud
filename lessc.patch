@@ -1,0 +1,25 @@
+--- vendor\less.php\less.php\bin\lessc	Thu Mar 12 03:41:58 2015
++++ lessc	Thu Mar 12 03:41:03 2015
+@@ -40,7 +40,8 @@
+                        be removed in the future.
+  -su=on|off            Allow mixed units, e.g. 1px+1em or 1px*1px which have units
+  --strict-units=on|off that cannot be represented.
+- -ru, --relative-urls  re-write relative urls to the base less file.
++ -nru,                 disable relative-url rewriting
++   --no-relative-urls
+  -rp, --rootpath=URL   Set rootpath for url rewriting in relative imports and urls.
+                        Works with or without the relative-urls option.
+  -w, --watch           Watch input files for changes.
+@@ -74,9 +75,9 @@
+ 				$env['compress'] = true;
+ 				break;
+ 
+-			case 'ru':
+-			case 'relative-urls':
+-				$env['relativeUrls'] = true;
++			case 'nru':
++			case 'no-relative-urls':
++				$env['relativeUrls'] = false;
+ 				break;
+ 
+ 			case 'su':

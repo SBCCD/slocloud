@@ -1,0 +1,305 @@
+{#
+
+SLO Cloud - A Cloud-Based SLO Reporting Tool for Higher Education
+
+This is a peer-reviewed, open-source, public project made possible by the Open Innovation in Higher Education project.
+
+Copyright (C) 2015 Jesse Lawson, San Bernardino Community College District
+
+Contributors:
+Jesse Lawson
+Jason Brady
+
+THIS PROJECT IS LICENSED UNDER GPLv2. YOU MAY COPY, DISTRIBUTE AND MODIFY THE SOFTWARE AS LONG AS YOU TRACK
+CHANGES/DATES OF IN SOURCE FILES AND KEEP ALL MODIFICATIONS UNDER GPL. YOU CAN DISTRIBUTE YOUR APPLICATION USING A
+GPL LIBRARY COMMERCIALLY, BUT YOU MUST ALSO DISCLOSE THE SOURCE CODE.
+
+GNU General Public License Version 2 Disclaimer:
+
+---
+
+This file is part of SLO Cloud
+
+SLO Cloud is free software; you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later.
+
+SLO Cloud is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free
+Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA or
+visit http://opensource.org/licenses/GPL-2.0
+
+---
+
+#}{% extends "base.html.twig" %}
+{% block bodyjs %}
+    {{ parent() }}
+    <script src="{{ script("rubric.js") }}"></script>
+{% endblock %}
+{% block title %}SLO Submission Form{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-xs-6">
+            <h4>Instructions</h4>
+
+            <div class="well">
+                <ul class="icons-list text-md">
+                    <li>
+                        <i class="icon-li fa fa-check-square text-secondary"></i>
+                        <strong>Fill out each section</strong>
+                        <br>
+                        Completeness is key to creating actionable reporting. Fill out all the fields and be as verbose as
+                        necessary.
+                    </li>
+                    <li>
+                        <i class="icon-li fa fa-comments-o text-success"></i>
+                        <strong>Discuss your ideas</strong>
+                        <br>
+                        Every single proposed action is considered, so use this time to get your best ideas on the plate.
+                    </li>
+                    <li>
+                        <i class="icon-li fa fa-institution text-secondary"></i>
+                        <strong>Keep doing what you're doing</strong>
+                        <br>
+                        Faculty are the backbone to any educational institution. Without you, we'd be nothing!
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-xs-6">
+            <h4>Your SLO Reporting Coordinator</h4>
+
+            <div class="well">
+                SLOCloud&trade; is an open-source higher education innovation project
+                for {{ institution['name'] }}. If you have any questions about this application or the
+                contents herein, please contact<br/><br/><strong>{{ institution['pocName'] }}</strong><br/><a
+                        href="mailto:{{ institution['pocEmail'] }}">{{ institution['pocEmail'] }}</a>
+            </div>
+        </div>
+    </div>
+
+    <form id="slo-form" class="form-horizontal" method="post">
+        <div id="alert"></div>
+        <div class="form-group form-group-lg">
+            <label for="term">Term</label>
+            <select id="term" name="term" class="form-control">
+                <option value="">--Select One--</option>
+                {% for term in termsList %}
+                    <option name="{{ term }}">{{ term }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group form-group-lg fieldset-subjects" style="display:none">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject" class="form-control">
+                <option value="">--Select One--</option>
+            </select>
+        </div>
+        <div class="form-group form-group-lg fieldset-classes" style="display:none">
+            <label for="class">Class</label>
+            <select id="class" name="class" class="form-control">
+                <option value="">--Select One--</option>
+            </select>
+        </div>
+        <div class="form-group form-group-lg fieldset-sections" style="display:none">
+            <label for="section">Section</label>
+            <select id="section" name="section" class="form-control">
+                <option value="">--Select One--</option>
+            </select>
+        </div>
+        <div class="form-group fieldset-slos" style="display:none">
+            <label for="slos">Class SLOs</label>
+            <div id="slos" class=""></div>
+        </div>
+        <div class="fieldset-slos" style="display:none">
+            <div class="form-group">
+                <label for="proposed">Proposed Actions</label>
+                <div class="controls">
+                    <textarea class="form-control" id="proposed" name="proposed"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="singlebutton">When you're finished, click the "Save & Submit"
+                    button below. If you have a new SLO report to make, the form will clear and you can begin
+                    reporting again. When you click the button below, your input is encrypted and saved into the
+                    database.</label>
+                <div class="controls">
+                    <button id="submit-button" name="singlebutton" class="submit-button btn btn-primary ladda-button"
+                            data-style="expand-right">Save & Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+{% block bottom %}
+    {% verbatim %}
+    <script id="success-template" type="text/x-handlebars-template">
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <strong>Success!</strong><br/>Your SLO report has been successfully saved. Use this form to submit
+            another one (go ahead!), or go to that committee meeting that you have been putting off.
+        </div>
+    </script>
+    <script id="validation-template" type="text/x-handlebars-template">
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <p><strong>Your missing something!</strong><br/>The following errors were found in your submission</p>
+            <ul>
+                {{#each errors}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
+    </script>
+    <script id="failure-template" type="text/x-handlebars-template">
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <strong>Failed!</strong><br/>A problem occurred during your submission. Please try submitting again.
+            If it still fails, please record your work so you can try again later. Please notify your IT department of the issue.
+            {{#if error.errors}}
+                <ul>
+                    {{#each error.errors}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+            {{/if}}
+        </div>
+    </script>
+    <script id="slo-table-template" type="text/x-handlebars-template">
+        <table class="table table-striped table-bordered">
+            <colgroup>
+                <col class="first"/>
+                <col class="second"/>
+                <col class="third"/>
+                <col class="fourth"/>
+                <col class="fifth"/>
+                <col class="sixth"/>
+                <col class="seventh"/>
+                <col class="eighth"/>
+                <col class="ninth"/>
+            </colgroup>
+            <thead>
+                <tr>
+                    <td rowspan="2"><strong>#</strong></td>
+                    <td rowspan="2"><strong>SLO Statement</strong></td>
+                    <td colspan="4"><strong># of Students<br />Meeting SLO Rubric</strong></td>
+                    <td rowspan="2"><strong>Total Assessed</strong></td>
+                    <td rowspan="2"><strong>% Assessed 3 or Higher</strong></td>
+                    <td rowspan="2"><strong>Target Met?</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>1</strong></td>
+                    <td><strong>2</strong></td>
+                    <td><strong>3</strong></td>
+                    <td><strong>4</strong></td>
+                </tr>
+            </thead>
+            <tbody>
+            {{{rows}}}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <button type="button" class="btn btn-default btn-sm slo-add" aria-label="Add" data-toggle="tooltip" title="Add">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                    <td colspan="8"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </script>
+    <script id="slo-row-template" type="text/x-handlebars-template">
+        <tr class="row-{{label}}">
+            <td rowspan="2" class="first">
+                <button type="button" class="btn btn-default btn-sm slo-delete"
+                        aria-label="Disable" data-toggle="tooltip" title="Disable"
+                        data-disable-label="Disable" data-enable-label="Enable">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>
+                <span class="slo-number">{{num}}</span>
+            </td>
+            <td rowspan="2">
+                <label for="{{label}}-statement" class="hide">SLO Statement {{num}}</label>
+                <textarea id="{{label}}-statement" name="{{label}}-statement" class="form-control">{{statement}}</textarea>
+            </td>
+            <td>
+                <label for="{{label}}-rubric-1" class="hide">SLO {{num}} Rubric 1</label>
+                <input type="text" id="{{label}}-rubric-1" name="{{label}}-rubric-1" class="input-sm form-control" value="0"/>
+            </td>
+            <td>
+                <label for="{{label}}-rubric-2" class="hide">SLO {{num}} Rubric 2</label>
+                <input type="text" id="{{label}}-rubric-2" name="{{label}}-rubric-2" class="input-sm form-control" value="0"/>
+            </td>
+            <td>
+                <label for="{{label}}-rubric-3" class="hide">SLO {{num}} Rubric 3</label>
+                <input type="text" id="{{label}}-rubric-3" name="{{label}}-rubric-3" class="input-sm form-control" value="0"/>
+            </td>
+            <td>
+                <label for="{{label}}-rubric-4" class="hide">SLO {{num}} Rubric 4</label>
+                <input type="text" id="{{label}}-rubric-4" name="{{label}}-rubric-4" class="input-sm form-control" value="0"/>
+            </td>
+            <td class="total"><span id="{{label}}-total"></span></td>
+            <td class="sufficient"><span id="{{label}}-sufficient"></span></td>
+            <td>
+                <label for="{{label}}-met" class="hide">SLO {{num}} Target Met?</label>
+                <select id="{{label}}-met" name="{{label}}-met" class="input-sm form-control">
+                    <option value="">--</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+            </td>
+        </tr>
+        <tr class="row-{{label}}">
+            <td colspan="7">
+                <div class="row">
+                    <div class="col-xs-12 om-label">
+                        <strong>Outcomes Mapping</strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="{{label}}-plo" class="control-label col-xs-4 om-label"><span class="hide">SLO {{num}} </span>Program-Level</label>
+                    <label for="{{label}}-geo" class="control-label col-xs-4 om-label"><span class="hide">SLO {{num}} </span>General Ed</label>
+                    <label for="{{label}}-ilo" class="control-label col-xs-4 om-label"><span class="hide">SLO {{num}} </span>Institutional</label>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <select id="{{label}}-plo" name="{{label}}-plo" data-toggle="tooltip" title="Please select one" class="form-control">
+                            <option value="" title="Please select one">--</option>
+                            {{#each plos}}
+                                <option value="{{@key}}" title="{{this}}">{{@key}}: {{trimString this 0 40}}</option>
+                            {{/each}}
+                            <option value="N/A" title="No Program level mapping for this statement">Not Applicable</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-4">
+                        <select id="{{label}}-geo" name="{{label}}-geo" data-toggle="tooltip" title="Please select one" class="form-control">
+                            <option value="" title="Please select one">--</option>
+                            {% endverbatim %}
+                            {% for i, GEO in GEOList %}
+                                <option value="{{ i }}" title="{{ GEO['Name'] }}: {{ GEO['Statement'] }}">{{ i }}: {{ GEO['Name'] }}</option>
+                            {% endfor %}
+                            {% verbatim %}
+                            <option value="N/A" title="No General Ed mapping for this statement">Not Applicable</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-4">
+                        <select id="{{label}}-ilo" name="{{label}}-ilo" data-toggle="tooltip" title="Please select one" class="form-control">
+                            <option value="" title="Please select one">--</option>
+                            {% endverbatim %}
+                            {% for i, ILO in ILOList %}
+                                <option value="{{ i }}" title="{{ ILO['Name'] }}: {{ ILO['Statement'] }}">{{ i }}: {{ ILO['Name'] }}</option>
+                            {% endfor %}
+                            {% verbatim %}
+                            <option value="N/A" title="No Institution level mapping for this statement">Not Applicable</option>
+                        </select>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </script>
+    {% endverbatim %}
+{% endblock %}
